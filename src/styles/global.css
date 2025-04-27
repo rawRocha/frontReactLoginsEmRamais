@@ -1,0 +1,31 @@
+:root {
+  --oxford-blue: #0b132bff;
+  --space-cadet: #1c2541ff;
+  --yinmn-blue: #3a506bff;
+  --verdigris: #5bc0beff;
+  --white: #ffffffff;
+  --green: #28a745;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a,
+li,
+h1 {
+  color: var(--space-cadet);
+  font-family: 'Inter', sans-serif;
+}
+
+/* index.css ou App.css */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

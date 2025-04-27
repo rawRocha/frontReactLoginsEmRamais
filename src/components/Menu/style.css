@@ -1,0 +1,98 @@
+.menu {
+  background-color: #fff;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  position: relative;
+  z-index: 10;
+}
+
+.menu-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.logo a {
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--yinmn-blue, #003f91);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 35px;
+  height: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 13px;
+  right: 20px;
+  z-index: 100;
+}
+
+.hamburger span {
+  height: 4px;
+  width: 100%;
+  background-color: var(--yinmn-blue, #003f91);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px; /* antes era 30px */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: var(--yinmn-blue, #003f91);
+}
+
+.last-user {
+  font-size: 12px;
+  margin-left: 20px;
+  color: #555;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links,
+  .last-user {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+    gap: 10px; /* adiciona espaçamento mais consistente */
+  }
+
+  .nav-links.open,
+  .last-user.open {
+    display: flex;
+  }
+
+  .menu-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .nav-links li {
+    padding: 8px 0;
+  }
+}
