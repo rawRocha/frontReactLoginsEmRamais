@@ -130,4 +130,4 @@ npm run dev
 
 ### 📄 Licença
 
-- Distribuído sob licença MIT. Veja LICENSE para mais informações.
+- Distribuído sob licença MIT. Veja [LICENSE](LICENSE) para mais informações.
