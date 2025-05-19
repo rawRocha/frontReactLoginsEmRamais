@@ -2,6 +2,7 @@ import './style.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 
 import SearchInput from '../../components/SearchInput/SearchInput';
 import Loading from '../../components/Loading/Loading';
@@ -11,7 +12,7 @@ import ModalLogin from '../../components/Modal/ModalLogin';
 import ModalRegister from '../../components/Modal/ModalRegister';
 
 //types
-import { Ramal, LoggedUser } from '../../types/ramalTypes';
+import { Ramal } from '../../types/ramalTypes';
 
 import {
   fetchUnvailableExtensions,
@@ -19,9 +20,11 @@ import {
   register,
 } from '../../services/extensionService';
 import { toast } from 'react-toastify';
+import { logoutUser } from '../../redux/userSlice';
 
 export const Logados = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [ramais, setRamais] = useState<Ramal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -115,10 +118,11 @@ export const Logados = () => {
       toast.success('Logout realizado com sucesso!');
       setShowModal(false);
       navigate('/');
+      dispatch(logoutUser(username)); // Isso agora vai pegar o usuário anterior do histórico
       await fetchRamais();
     } catch (err) {
-      toast.error(err.response.data.message);
-      setLoginError(err.response.data.message);
+      toast.error(err.response?.data?.message || 'Erro ao fazer logout');
+      setLoginError(err.response?.data?.message || 'Erro ao fazer logout');
     }
   };
 

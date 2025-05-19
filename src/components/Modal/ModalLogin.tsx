@@ -61,7 +61,7 @@ const ModalLogin = ({
           </button>
           <br />
           <br />
-          <button type="submit">Entrar</button>
+          <button type="submit">{isLogin ? `Entrar` : `Logout`}</button>
           <button type="button" onClick={() => setShowModal(false)}>
             Cancelar
           </button>

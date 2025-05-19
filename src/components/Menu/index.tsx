@@ -1,45 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './style.css';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-
 import { FaCircle } from 'react-icons/fa';
+import { RootState } from '../../store';
 import { fetchUnvailableExtensions } from '../../services/extensionService';
+import './style.css';
+
+type LoggedUser = {
+  id: number;
+  username: string;
+  password: string;
+};
 
 type LastLogin = {
   id: number;
   extensionNumber: string;
-  loggedUser: {
-    id: number;
-    username: string;
-    password: string;
-  } | null;
+  loggedUser: LoggedUser | null;
 };
 
 export const Menu = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastLogin, setLastLogin] = useState<LastLogin | null>(null);
 
-  //fetch de ramais
-  const fetchRamais = async () => {
-    try {
-      const data = await fetchUnvailableExtensions();
-      setLastLogin(data[0]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // Obter dados do usuário do Redux
+  const { currentUser, previousUsers } = useSelector(
+    (state: RootState) => state.user
+  );
+  const displayedUser = currentUser || previousUsers[0];
+  const { username = '', extension = '' } = displayedUser || {};
 
-  const { username, extension } = useSelector((state: RootState) => state.user);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
+  // Buscar dados dos ramais
   useEffect(() => {
+    const fetchRamais = async () => {
+      try {
+        const data = await fetchUnvailableExtensions();
+        setLastLogin(data[0]);
+      } catch (error) {
+        console.error('Failed to fetch extensions:', error);
+      }
+    };
+
     fetchRamais();
   }, []);
+
+  const toggleMenu = () => setIsMenuOpen(prev => !prev);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const shouldShowUserInfo = username || lastLogin?.loggedUser?.username;
+  const displayUsername = username || lastLogin?.loggedUser?.username || '';
+  const displayExtension = extension || lastLogin?.extensionNumber || '';
 
   return (
     <nav className="menu">
@@ -48,33 +57,42 @@ export const Menu = () => {
           <Link to="/">Logins em Ramais</Link>
         </div>
 
-        <button className="hamburger" onClick={toggleMenu}>
+        <button
+          className={`hamburger ${isMenuOpen ? 'open' : ''}`}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
+        >
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+        <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
           <li>
-            <Link to="/" onClick={toggleMenu}>
+            <Link to="/" onClick={closeMenu}>
               Disponíveis
             </Link>
           </li>
           <li>
-            <Link to="/logados" onClick={toggleMenu}>
+            <Link to="/logados" onClick={closeMenu}>
               Ocupados
             </Link>
           </li>
         </ul>
 
-        {username || lastLogin?.loggedUser?.username ? (
-          <div className={`last-user ${isOpen ? 'open' : ''}`}>
-            Last login:{' '}
-            <strong>{username || lastLogin?.loggedUser?.username}</strong> in
-            extension <strong>{extension || lastLogin?.extensionNumber}</strong>
-            <FaCircle color="green" size={10} style={{ marginLeft: '5px' }} />
+        {shouldShowUserInfo && (
+          <div className={`last-user ${isMenuOpen ? 'open' : ''}`}>
+            Last login: <strong>{displayUsername}</strong> in extension{' '}
+            <strong>{displayExtension}</strong>
+            <FaCircle
+              color="green"
+              size={10}
+              style={{ marginLeft: '5px' }}
+              aria-hidden="true"
+            />
           </div>
-        ) : null}
+        )}
       </div>
     </nav>
   );

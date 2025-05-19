@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../../redux/userSlice';
+import { loginUser, logoutUser } from '../../redux/userSlice';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 import Loading from '../../components/Loading/Loading';
@@ -209,7 +209,7 @@ export const Home = () => {
           extensionNumber: selectedExtension,
         });
         toast.success('Login realizado com sucesso!');
-        dispatch(setUserInfo({ username, extension: selectedExtension }));
+        dispatch(loginUser({ username, extension: selectedExtension }));
         navigate('/logados');
       } else {
         await logoutToExtension({
@@ -218,7 +218,9 @@ export const Home = () => {
           extensionNumber: selectedExtension,
         });
         toast.success('Logout realizado com sucesso!');
+        dispatch(logoutUser());
         setSearchTerm('');
+        fetchRamais();
       }
 
       setShowModal(false);
